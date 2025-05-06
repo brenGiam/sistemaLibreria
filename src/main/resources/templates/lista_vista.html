@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="~{fragments/head :: head('Catálogo')}"></head>
+
+<body>
+    <header>
+        <nav th:replace="~{fragments/navbar :: nav}"></nav>
+    </header>
+    <div th:replace="~{fragments/msjeErrorExito :: div}"></div>
+
+    <main class="list-container">
+        <div class="volver-btn-container">
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/dashboard}">Atrás</a>
+            <a sec:authorize="hasRole('USER')" th:href="@{/inicio}">Atrás</a>
+        </div>
+        <section>
+            <!-- Tabla para mostrar los libros -->
+            <div th:if="${tipoEntidad == 'libro'}">
+                <div class="list-header">
+                    <h2>Lista Libros</h2>
+                    <div class="actions">
+                        <a sec:authorize="hasRole('ADMIN')" th:href="@{/libro/crear}" class="btn btn-nvo">Registrar
+                            nuevo
+                        </a>
+                        <div class="dropdown">
+                            <a href="#" class="btn btn-filtro" onclick="toggleDropdown('dropdown')">Ordenar</a>
+                            <div id="dropdown" class="dropdown-content" style="display: none;">
+                                <a th:href="@{/libro/listarTodos(ordenar=titulo)}">Alfabéticamente (A-Z)</a>
+                            </div>
+                        </div>
+                        <div class="buscar-container">
+                            <form th:action="@{/libro/buscar}" method="get" class="form-buscar">
+                                <button class="btn btn-filtro" type="submit">Buscar</button>
+                                <input type="text" name="query" placeholder="Buscar libro, autor, editorial"
+                                    th:value="${query}" />
+                            </form>
+                            <a th:href="@{/libro/listarTodos}" class="btn btn-filtro">Cancelar</a>
+                        </div>
+                    </div>
+                </div>
+                <table class="list-table">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="libro : ${libros}">
+                            <td th:text="${libro.titulo}"></td>
+                            <td class="table-actions">
+                                <a th:href="@{/libro/__${libro.isbn}__}" class="btn-table btn-edit">
+                                    <i class="fas fa-list"></i> Ver
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="pagination" th:if="${tipoEntidad == 'libro'}">
+                    <!-- Para resultados de búsqueda -->
+                    <a th:if="${pagina.hasPrevious() && query != null}"
+                        th:href="@{/libro/buscar(page=${pagina.number - 1}, query=${query})}">Anterior</a>
+                    <!-- Para lista ordenada -->
+                    <a th:if="${pagina.hasPrevious() && query == null && ordenar != null}"
+                        th:href="@{/libro/listarTodos(page=${pagina.number - 1}, ordenar=${ordenar})}">Anterior</a>
+                    <!-- Para lista normal -->
+                    <a th:if="${pagina.hasPrevious() && query == null && ordenar == null}"
+                        th:href="@{/libro/listarTodos(page=${pagina.number - 1})}">Anterior</a>
+
+                    <span th:text="'Página ' + (${pagina.number} + 1) + ' de ' + ${pagina.totalPages}"></span>
+
+                    <a th:if="${pagina.hasNext() && query != null}"
+                        th:href="@{/libro/buscar(page=${pagina.number + 1}, query=${query})}">Siguiente</a>
+
+                    <a th:if="${pagina.hasNext() && query == null && ordenar != null}"
+                        th:href="@{/libro/listarTodos(page=${pagina.number + 1}, ordenar=${ordenar})}">Siguiente</a>
+
+                    <a th:if="${pagina.hasNext() && query == null && ordenar == null}"
+                        th:href="@{/libro/listarTodos(page=${pagina.number + 1})}">Siguiente</a>
+                </div>
+            </div>
+            <!-- Tabla para mostrar los autores -->
+            <div th:if="${tipoEntidad == 'autor'}">
+                <div class="list-header">
+                    <h2>Lista Autores</h2>
+                    <div class="actions">
+                        <a sec:authorize="hasRole('ADMIN')" th:href="@{/autor/crear}" class="btn btn-nvo">Registrar
+                            nuevo</a>
+                        <div class="dropdown">
+                            <a href="#" class="btn btn-filtro" onclick="toggleDropdown('dropdown')">Ordenar</a>
+                            <div id="dropdown" class="dropdown-content" style="display: none;">
+                                <a th:href="@{/autor/listarTodos(ordenar=nombre)}">Alfabéticamente (A-Z)</a>
+                            </div>
+                        </div>
+                        <div class="buscar-container">
+                            <form th:action="@{/autor/buscar}" method="get" class="form-buscar">
+                                <input type="text" name="query" placeholder="Buscar autor" th:value="${query}" />
+                                <button class="btn btn-filtro" type="submit">Buscar</button>
+                            </form>
+                            <a th:href="@{/autor/listarTodos}" class="btn btn-filtro">Cancelar</a>
+                        </div>
+                    </div>
+                </div>
+                <table class="list-table">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="autor : ${autores}">
+                            <td th:text="${autor.nombre}"></td>
+                            <td class="table-actions">
+                                <a th:href="@{/autor/__${autor.id}__}" class="btn-table btn-edit">
+                                    <i class="fas fa-list"></i> Ver
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="pagination" th:if="${tipoEntidad == 'autor'}">
+                    <!-- Para resultados de búsqueda -->
+                    <a th:if="${pagina.hasPrevious() && query != null}"
+                        th:href="@{/autor/buscar(page=${pagina.number - 1}, query=${query})}">Anterior</a>
+
+                    <!-- Para lista ordenada -->
+                    <a th:if="${pagina.hasPrevious() && query == null && ordenar != null}"
+                        th:href="@{/autor/listarTodos(page=${pagina.number - 1}, ordenar=${ordenar})}">Anterior</a>
+
+                    <!-- Para lista normal -->
+                    <a th:if="${pagina.hasPrevious() && query == null && ordenar == null}"
+                        th:href="@{/autor/listarTodos(page=${pagina.number - 1})}">Anterior</a>
+
+                    <span th:text="'Página ' + (${pagina.number} + 1) + ' de ' + ${pagina.totalPages}"></span>
+
+                    <a th:if="${pagina.hasNext() && query != null}"
+                        th:href="@{/autor/buscar(page=${pagina.number + 1}, query=${query})}">Siguiente</a>
+
+                    <a th:if="${pagina.hasNext() && query == null && ordenar != null}"
+                        th:href="@{/autor/listarTodos(page=${pagina.number + 1}, ordenar=${ordenar})}">Siguiente</a>
+
+                    <a th:if="${pagina.hasNext() && query == null && ordenar == null}"
+                        th:href="@{/autor/listarTodos(page=${pagina.number + 1})}">Siguiente</a>
+                </div>
+            </div>
+            <!-- Tabla para mostrar las editoriales -->
+            <div th:if="${tipoEntidad == 'editorial'}">
+                <div class="list-header">
+                    <h2>Lista Editoriales</h2>
+                    <div class="actions">
+                        <a sec:authorize="hasRole('ADMIN')" th:href="@{/editorial/crear}" class="btn btn-nvo">Registrar
+                            nuevo</a>
+                        <div class="dropdown">
+                            <a href="#" class="btn btn-filtro" onclick="toggleDropdown('dropdown')">Ordenar</a>
+                            <div id="dropdown" class="dropdown-content" style="display: none;">
+                                <a th:href="@{/editorial/listarTodas(ordenar=nombre)}">Alfabéticamente (A-Z)</a>
+                            </div>
+                        </div>
+                        <div class="buscar-container">
+                            <form th:action="@{/editorial/buscar}" method="get" class="form-buscar">
+                                <input type="text" name="query" placeholder="Buscar editorial" th:value="${query}" />
+                                <button class="btn btn-filtro" type="submit">Buscar</button>
+                            </form>
+                            <a th:href="@{/editorial/listarTodas}" class="btn btn-filtro">Cancelar</a>
+                        </div>
+                    </div>
+                </div>
+                <table class="list-table">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="editorial : ${editoriales}">
+                            <td th:text="${editorial.nombre}"></td>
+                            <td class="table-actions">
+                                <a th:href="@{/editorial/__${editorial.id}__}" class="btn-table btn-edit">
+                                    <i class="fas fa-list"></i> Ver
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="pagination" th:if="${tipoEntidad == 'editorial'}">
+                    <!-- Para resultados de búsqueda -->
+                    <a th:if="${pagina.hasPrevious() && query != null}"
+                        th:href="@{/editorial/buscar(page=${pagina.number - 1}, query=${query})}">Anterior</a>
+
+                    <!-- Para lista ordenada -->
+                    <a th:if="${pagina.hasPrevious() && query == null && ordenar != null}"
+                        th:href="@{/editorial/listarTodas(page=${pagina.number - 1}, ordenar=${ordenar})}">Anterior</a>
+
+                    <!-- Para lista normal -->
+                    <a th:if="${pagina.hasPrevious() && query == null && ordenar == null}"
+                        th:href="@{/editorial/listarTodas(page=${pagina.number - 1})}">Anterior</a>
+
+                    <span th:text="'Página ' + (${pagina.number} + 1) + ' de ' + ${pagina.totalPages}"></span>
+
+                    <a th:if="${pagina.hasNext() && query != null}"
+                        th:href="@{/editorial/buscar(page=${pagina.number + 1}, query=${query})}">Siguiente</a>
+
+                    <a th:if="${pagina.hasNext() && query == null && ordenar != null}"
+                        th:href="@{/editorial/listarTodas(page=${pagina.number + 1}, ordenar=${ordenar})}">Siguiente</a>
+
+                    <a th:if="${pagina.hasNext() && query == null && ordenar == null}"
+                        th:href="@{/editorial/listarTodas(page=${pagina.number + 1})}">Siguiente</a>
+                </div>
+            </div>
+            <!-- Tabla para mostrar los usuarios-->
+            <div th:if="${tipoEntidad == 'usuario'}">
+                <div class="list-header">
+                    <h2>Lista Usuarios</h2>
+                    <div class="actions">
+                        <div class="dropdown">
+                            <a href="#" class="btn btn-filtro" onclick="toggleDropdown('dropdown')">Ordenar</a>
+                            <div id="dropdown" class="dropdown-content" style="display: none;">
+                                <a th:href="@{/admin/listarUsuarios(ordenar=apellido)}">Alfabéticamente (A-Z)</a>
+                            </div>
+                        </div>
+                        <div class="buscar-container">
+                            <form th:action="@{/admin/buscar}" method="get" class="form-buscar">
+                                <input type="text" name="query" placeholder="Buscar usuario" th:value="${query}" />
+                                <button class="btn btn-filtro" type="submit">Buscar</button>
+                            </form>
+                            <a th:href="@{/admin/listarUsuarios}" class="btn btn-filtro">Cancelar</a>
+                        </div>
+                    </div>
+                </div>
+                <table class="list-table">
+                    <thead>
+                        <tr>
+                            <th>Apellido</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Imágen</th>
+                            <th>Rol</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="usuario : ${usuarios}">
+                            <td th:text="${usuario.apellido}"></td>
+                            <td th:text="${usuario.nombre}"></td>
+                            <td th:text="${usuario.email}"></td>
+                            <td>
+                                <a th:if="${usuario.imagen != null}" th:href="@{/imagen/perfil/__${usuario.id}__}">
+                                    <img class="imagenUsuario" th:src="@{/imagen/perfil/__${usuario.id}__}"
+                                        alt="Imagen de usuario">
+                                </a>
+                                <img class="imagenUsuario" th:unless="${usuario.imagen != null}"
+                                    th:src="@{/img/defaultArticulo.jpg}" alt="Imagen predeterminada">
+                            </td>
+                            <td th:text="${usuario.rol}"></td>
+                            <td class="table-actions">
+                                <a th:href="@{/admin/modificarRol/__${usuario.id}__}" class="btn-table btn-rol">
+                                    <i class="fas fa-feather-alt"></i> Cambiar Rol
+                                </a>
+                                <a th:href="@{/admin/modificar/{id}(id=${usuario.id})}" class="btn-table btn-edit">
+                                    <i class="fas fa-edit"></i> Modificar
+                                </a>
+                                <form th:action="@{/admin/eliminarUsuario/{id}(id=${usuario.id})}" method="post">
+                                    <input type="hidden" name="_method" value="DELETE" />
+                                    <button type="submit" class="btn-table btn-delete"
+                                        onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
+                                        <i class="fas fa-trash-alt"></i> Eliminar
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="pagination" th:if="${tipoEntidad == 'usuario'}">
+                    <!-- Para resultados de búsqueda -->
+                    <a th:if="${pagina.hasPrevious() && query != null}"
+                        th:href="@{/admin/buscar(page=${pagina.number - 1}, query=${query})}">Anterior</a>
+
+                    <!-- Para lista ordenada -->
+                    <a th:if="${pagina.hasPrevious() && query == null && ordenar != null}"
+                        th:href="@{/admin/listarUsuarios(page=${pagina.number - 1}, ordenar=${ordenar})}">Anterior</a>
+
+                    <!-- Para lista normal -->
+                    <a th:if="${pagina.hasPrevious() && query == null && ordenar == null}"
+                        th:href="@{/admin/listarUsuarios(page=${pagina.number - 1})}">Anterior</a>
+
+                    <span th:text="'Página ' + (${pagina.number} + 1) + ' de ' + ${pagina.totalPages}"></span>
+
+                    <a th:if="${pagina.hasNext() && query != null}"
+                        th:href="@{/admin/buscar(page=${pagina.number + 1}, query=${query})}">Siguiente</a>
+
+                    <a th:if="${pagina.hasNext() && query == null && ordenar != null}"
+                        th:href="@{/admin/listarUsuarios(page=${pagina.number + 1}, ordenar=${ordenar})}">Siguiente</a>
+
+                    <a th:if="${pagina.hasNext() && query == null && ordenar == null}"
+                        th:href="@{/admin/listarUsuarios(page=${pagina.number + 1})}">Siguiente</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"> </footer>
+
+    <script>
+        function toggleDropdown(id) {
+            const dropdown = document.getElementById(id);
+            if (dropdown) {
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+            }
+        }
+    </script>
+
+</body>
+
+</html>

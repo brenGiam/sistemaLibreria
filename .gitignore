@@ -1,0 +1,64 @@
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+# Archivos de entorno y configuración
+.env
+application.properties
+application.yml
+application-local.properties
+
+# Archivos generados por Maven
+/logs
+*.log
+.mvn/
+!mvnw
+!mvnw.cmd
+
+# Sistema operativo
+*.swp
+*.bak
+*.tmp
+
+# Archivos de bases de datos locales
+*.h2.db
+*.mv.db
+
+# Token de autenticación u otros secretos
+.secret
+*.key
+*.pem

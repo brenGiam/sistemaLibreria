@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head th:replace="~{fragments/head :: head('Inicio')}"></head>
+
+<body>
+    <header>
+        <nav th:replace="~{fragments/navbar :: nav}"></nav>
+    </header>
+    <div th:replace="~{fragments/msjeErrorExito :: div}"></div>
+
+    <main class="inicio-container">
+        <div class="cards-container">
+            <div class="card-container">
+                <div class="card-icon">📚</div>
+                <h3>Libros</h3>
+                <div class="card-options">
+                    <a th:href="@{/libro/listarTodos}">Listar libros</a>
+                    <a th:href="@{/libro/crear}">Registrar libro</a>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-icon">🖋️</div>
+                <h3>Autores</h3>
+                <div class="card-options">
+                    <a th:href="@{/autor/listarTodos}">Listar autores</a>
+                    <a th:href="@{/autor/crear}">Registrar autor</a>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-icon">🏢</div>
+                <h3>Editoriales</h3>
+                <div class="card-options">
+                    <a th:href="@{/editorial/listarTodas}">Listar editoriales</a>
+                    <a th:href="@{/editorial/crear}">Registrar editorial</a>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card-icon">👥</div>
+                <h3>Gestión de Usuarios</h3>
+                <div class="card-options">
+                    <a th:href="@{/admin/listarUsuarios}">Listar usuarios</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}">
+    </footer>
+</body>
+
+</html>

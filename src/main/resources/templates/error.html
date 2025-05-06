@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head th:replace="~{fragments/head :: head('Error')}"></head>
+
+<body class="bodyError">
+    <div class="error-container">
+        <div class="error-code" th:text="${codigo}">404</div>
+        <div class="error-message" th:text="${mensaje}">El recurso solicitado no fue encontrado.</div>
+        <a class="back-home" href="/">Volver al inicio</a>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+<nav class="navbar">
+    <h1 class="navbar-title">Sistema de Librería</h1>
+    <div class="nav-welcome-message">
+        <h3 class="navbar-saludo" th:text="'Hola, ' + ${session.usuariosession.nombre}">Hola, usuario</h3>
+        <div th:if="${session.usuariosession != null}">
+            <a th:if="${session.usuariosession.imagen != null}"
+                th:href="@{/imagen/perfil/__${session.usuariosession.id}__}">
+                <img class="imagen-usuario-nav" th:src="@{/imagen/perfil/__${session.usuariosession.id}__}"
+                    alt="Imagen de usuario">
+            </a>
+            <img class="imagen-usuario-nav" th:unless="${session.usuariosession.imagen != null}"
+                th:src="@{/img/defaultArticulo.jpg}" alt="Imagen predeterminada">
+        </div>
+        <div class="nav-buttons-container">
+            <a th:href="@{/perfil}" class="btn-nav">Editar Perfil</a>
+            <a th:href="@{/logout}" class="btn-nav">Cerrar sesión</a>
+        </div>
+    </div>
+</nav>

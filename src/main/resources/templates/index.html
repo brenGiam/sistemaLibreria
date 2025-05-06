@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head th:replace="~{fragments/head :: head('Sistema Librería')}"></head>
+
+<body>
+    <main class="index-main-container">
+        <section class="welcome">
+            <h2>Bienvenido al sistema de Librería</h2>
+            <p>Tu sistema confiable de libros.</p>
+            <div class="buttons-container">
+                <a href="/registrar" class="btn btn-register">Registrarse</a>
+                <a href="/login" class="btn btn-login">Iniciar sesión</a>
+            </div>
+        </section>
+    </main>
+    <footer th:replace="~{fragments/footer :: footer}"> </footer>
+</body>
+
+</html>

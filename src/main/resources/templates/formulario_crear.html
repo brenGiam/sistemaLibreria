@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="~{fragments/head :: head('Registrar nuevo')}"> </head>
+
+<body>
+    <header>
+        <nav th:replace="~{fragments/navbar :: nav}"></nav>
+    </header>
+    <div th:replace="~{fragments/msjeErrorExito :: div}"></div>
+
+    <main class="main-form-container">
+        <section class="form-container">
+            <h2 th:text="${subtitulo}"></h2>
+            <!--Crear un nuevo libro-->
+            <form th:if="${esLibro == true}" th:action="@{/libro/crear}" method="POST" enctype="multipart/form-data">
+                <div>
+                    <div class="form-group">
+                        <label for="isbn">ISBN:</label>
+                        <input type="text" id="isbn" name="isbn" th:value="${isbn}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="titulo">Titulo:</label>
+                        <input type="text" id="titulo" name="titulo" th:value="${titulo}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ejemplares">Ejemplares:</label>
+                        <input type="text" id="ejemplares" name="ejemplares" th:value="${ejemplares}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="idAutor">Autor:</label>
+                        <select name="idAutor" required>
+                            <option value="">Seleccionar Autor</option>
+                            <option th:each="autor : ${autores}" th:value="${autor.id}" th:text="${autor.nombre}"
+                                th:selected="${libro.idAutor == autor.id}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="idEditorial">Editorial:</label>
+                        <select name="idEditorial" required>
+                            <option value="">Seleccionar Editorial</option>
+                            <option th:each="editorial : ${editoriales}" th:value="${editorial.id}"
+                                th:text="${editorial.nombre}" th:selected="${libro.idEditorial == editorial.id}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="imagen">Foto:</label>
+                        <input class="cargarImagen" id="imagen" type="file" name="imagen" accept="image/*" />
+                    </div>
+                    <div class="buttons-container">
+                        <button type="submit" class="btn btn-guardar">Guardar</button>
+                        <a th:href="@{/admin/dashboard}" class="btn btn-cancelar">Cancelar</a>
+                    </div>
+                    <div class="volver-btn-container">
+                        <a th:href="@{/admin/dashboard}">Inicio</a>
+                        <a th:href="@{/libro/listarTodos}">Atrás</a>
+                    </div>
+                </div>
+            </form>
+            <!--Crear un nuevo autor-->
+            <form th:if="${esAutor == true}" th:action="@{/autor/crear}" method="POST" enctype="multipart/form-data">
+                <div>
+                    <div class="form-group">
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" id="nombre" name="nombre" th:value="${nombre}" required>
+                    </div>
+                    <div class="buttons-container">
+                        <button type="submit" class="btn btn-guardar">Guardar</button>
+                        <a th:href="@{/admin/dashboard}" class="btn btn-cancelar">Cancelar</a>
+                    </div>
+                    <div class="volver-btn-container">
+                        <a th:href="@{/admin/dashboard}">Inicio</a>
+                        <a th:href="@{/autor/listarTodos}">Atrás</a>
+                    </div>
+                </div>
+            </form>
+            <!--Crear una nueva editorial-->
+            <form th:if="${esEditorial == true}" th:action="@{/editorial/crear}" method="POST"
+                enctype="multipart/form-data">
+                <div>
+                    <div class="form-group">
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" id="nombre" name="nombre" th:value="${nombre}" required>
+                    </div>
+                    <div class="buttons-container">
+                        <button type="submit" class="btn btn-guardar">Guardar</button>
+                        <a th:href="@{/admin/dashboard}" class="btn btn-cancelar">Cancelar</a>
+                    </div>
+                    <div class="volver-btn-container">
+                        <a th:href="@{/admin/dashboard}">Inicio</a>
+                        <a th:href="@{/editorial/listarTodas}">Atrás</a>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </main>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+
+</html>

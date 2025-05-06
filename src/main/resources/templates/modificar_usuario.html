@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/head :: head('Editar Perfil')}"> </head>
+
+<body>
+    <header>
+        <nav th:replace="~{fragments/navbar :: nav}"></nav>
+    </header>
+    <div th:replace="~{fragments/msjeErrorExito :: div}"></div>
+
+    <main class="main-form-container">
+        <div class="volver-btn-container">
+            <!-- Si el usuario es ADMIN -->
+            <div sec:authorize="hasRole('ADMIN')">
+                <a th:href="@{/admin/dashboard}">Atrás</a>
+            </div>
+
+            <!-- Si el usuario es USER -->
+            <div sec:authorize="hasRole('USER')">
+                <a th:href="@{/inicio}">Atrás</a>
+            </div>
+        </div>
+        <section class="form-container">
+            <h2> Modificar Usuario</h2>
+            <!--Form para el Admin-->
+            <form sec:authorize="hasRole('ADMIN')" th:action="@{/admin/modificar/__${usuario.id}__}" method="POST"
+                enctype="multipart/form-data">
+                <input type="hidden" name="_method" value="PUT" />
+                <div>
+                    <div class="form-group">
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" id="nombre" name="nombre" th:value="${usuario.nombre}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="apellido">Apellido:</label>
+                        <input type="text" id="apellido" name="apellido" th:value="${usuario.apellido}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" th:value="${usuario.email}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="archivo">Foto:</label>
+                        <input class="cargarImagen" id="archivo" type="file" name="archivo" />
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" placeholder="Password" minlength="5"
+                            maxlength="20" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password2">Confirmar Password:</label>
+                        <input type="password" id="password2" name="password2" placeholder="Confirmar Password"
+                            minlength="5" maxlength="20" required>
+                    </div>
+                    <div class="buttons-container">
+                        <button type="submit" class="btn btn-guardar">Guardar</button>
+                        <a th:href="@{/admin/listarUsuarios}" class="btn btn-cancelar">Cancelar</a>
+                    </div>
+                </div>
+            </form>
+            <!--Form para el user-->
+            <form sec:authorize="hasRole('USER')" th:action="@{/perfil/__${usuario.id}__}" method="POST"
+                enctype="multipart/form-data">
+                <input type="hidden" name="_method" value="PUT" />
+                <div>
+                    <div class="form-group">
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" id="nombre" name="nombre" th:value="${usuario.nombre}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="apellido">Apellido:</label>
+                        <input type="text" id="apellido" name="apellido" th:value="${usuario.apellido}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" th:value="${usuario.email}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="archivo">Foto:</label>
+                        <input class="cargarImagen" id="archivo" type="file" name="archivo" />
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" placeholder="Password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password2">Confirmar Password:</label>
+                        <input type="password" id="password2" name="password2" placeholder="Confirmar Password"
+                            required>
+                    </div>
+                    <div class="buttons-container">
+                        <button type="submit" class="btn btn-guardar">Guardar</button>
+                        <a th:href="@{/inicio}" class="btn btn-cancelar">Cancelar</a>
+                    </div>
+            </form>
+        </section>
+    </main>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+
+</html>

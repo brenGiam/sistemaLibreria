@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="~{fragments/head :: head('Detalle')}"></head>
+
+<body>
+    <header>
+        <nav th:replace="~{fragments/navbar :: nav}"></nav>
+    </header>
+    <div th:replace="~{fragments/msjeErrorExito :: div}"></div>
+
+    <main class="list-container">
+        <section class="section-list">
+            <!-- Tabla para mostrar detalle del Libro -->
+            <div th:if="${tipoEntidad == 'libro'}">
+                <div class="volver-btn-container">
+                    <a class="btn" th:href="@{/libro/listarTodos}">Atrás</a>
+                </div>
+                <div class="list-header">
+                    <h2 th:text="${libro.titulo}"></h2>
+                </div>
+                <ul class="detalle-lista">
+                    <li><strong>Autor:</strong> <span th:text="${libro.autor.nombre}"></span></li>
+                    <li><strong>Editorial:</strong> <span th:text="${libro.editorial.nombre}"></span></li>
+                    <li><strong>Cantidad de ejemplares:</strong> <span th:text="${libro.ejemplares}"></span></li>
+                    <li><strong>Activo:</strong> <span th:text="${libro.libroActivo} ? 'Sí' : 'No'"></span></li>
+                </ul>
+                <div class="imagen-libro-container" th:if="${libro.imagen != null}">
+                    <img th:src="@{/imagen/libro/{isbn}(isbn=${libro.isbn})}" alt="Imagen del libro"
+                        class="imagen-libro" />
+                </div>
+                <div class="actions">
+                    <a sec:authorize="hasRole('ADMIN')" th:href="@{/libro/modificar/__${libro.isbn}__}"
+                        class="btn btn-edit"><i class="fas fa-edit"></i>Modificar
+                    </a>
+                    <form sec:authorize="hasRole('ADMIN')" th:action="@{/libro/baja/__${libro.isbn}__}" method="post"
+                        style="display:inline;">
+                        <input type="hidden" name="_method" value="PATCH" />
+                        <button type="submit" class="btn btn-nvo"
+                            onclick="return confirm('¿Estás seguro de que deseas dar de baja este libro?');">
+                            <i class="fas fa-feather-alt"></i> Dar de baja
+                        </button>
+                    </form>
+                    <form sec:authorize="hasRole('ADMIN')" th:action="@{/libro/alta/__${libro.isbn}__}" method="post"
+                        style="display:inline;">
+                        <input type="hidden" name="_method" value="PATCH" />
+                        <button type="submit" class="btn btn-nvo"
+                            onclick="return confirm('¿Estás seguro de que deseas dar de alta este libro?');">
+                            <i class="fas fa-feather-alt"></i> Dar de alta
+                        </button>
+                    </form>
+                    <form sec:authorize="hasRole('ADMIN')" th:action="@{/libro/eliminar/__${libro.isbn}__}"
+                        method="post" style="display:inline;">
+                        <input type="hidden" name="_method" value="DELETE" />
+                        <button type="submit" class="btn btn-delete"
+                            onclick="return confirm('¿Estás seguro de que deseas eliminar este libro?');">
+                            <i class="fas fa-trash-alt"></i> Eliminar
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <!-- Tabla para mostrar detalle del Autor -->
+            <div th:if="${tipoEntidad == 'autor'}">
+                <div class="volver-btn-container">
+                    <a class="btn" th:href="@{/autor/listarTodos}">Atrás</a>
+                </div>
+                <div class="list-header">
+                    <h2 th:text="Autor"></h2>
+                </div>
+                <ul class="detalle-lista">
+                    <li><strong>Nombre:</strong> <span th:text="${autor.nombre}"></span></li>
+                    <li><strong>Activo:</strong> <span th:text="${autor.autorActivo} ? 'Sí' : 'No'"></span></li>
+                </ul>
+                <div class="actions">
+                    <a sec:authorize="hasRole('ADMIN')" th:href="@{/autor/modificar/__${autor.id}__}"
+                        class="btn btn-edit"><i class="fas fa-edit"></i>Modificar</a>
+                    <form sec:authorize="hasRole('ADMIN')" th:action="@{/autor/baja/__${autor.id}__}" method="post"
+                        style="display:inline;">
+                        <input type="hidden" name="_method" value="PATCH" />
+                        <button type="submit" class="btn btn-nvo"
+                            onclick="return confirm('¿Estás seguro de que deseas dar de baja este autor?');">
+                            <i class="fas fa-feather-alt"></i> Dar de baja
+                        </button>
+                    </form>
+                    <form sec:authorize="hasRole('ADMIN')" th:action="@{/autor/alta/__${autor.id}__}" method="post"
+                        style="display:inline;">
+                        <input type="hidden" name="_method" value="PATCH" />
+                        <button type="submit" class="btn btn-nvo"
+                            onclick="return confirm('¿Estás seguro de que deseas dar de alta este autor?');">
+                            <i class="fas fa-feather-alt"></i> Dar de alta
+                        </button>
+                    </form>
+                    <form sec:authorize="hasRole('ADMIN')" th:action="@{/autor/eliminar/__${autor.id}__}" method="post"
+                        style="display:inline;">
+                        <input type="hidden" name="_method" value="DELETE" />
+                        <button type="submit" class="btn btn-delete"
+                            onclick="return confirm('¿Estás seguro de que deseas eliminar este autor?');">
+                            <i class="fas fa-trash-alt"></i> Eliminar
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <!-- Tabla para mostrar detalle de la Editorial -->
+            <div th:if="${tipoEntidad == 'editorial'}">
+                <div class="volver-btn-container">
+                    <a class="btn" th:href="@{/editorial/listarTodas}">Atrás</a>
+                </div>
+                <div class="list-header">
+                    <h2 th:text="Editorial"></h2>
+                </div>
+                <ul class="detalle-lista">
+                    <li><strong>Nombre:</strong><span th:text="${editorial.nombre}"></span></li>
+                    <li><strong>Activo:</strong><span th:text="${editorial.editorialActiva} ? 'Sí' : 'No'"></span></li>
+                </ul>
+                <div class="actions">
+                    <a sec:authorize="hasRole('ADMIN')" th:href="@{/editorial/modificar/__${editorial.id}__}"
+                        class="btn btn-edit"><i class="fas fa-edit"></i>Modificar</a>
+                    <form sec:authorize="hasRole('ADMIN')" th:action="@{/editorial/baja/__${editorial.id}__}"
+                        method="post" style="display:inline;">
+                        <input type="hidden" name="_method" value="PATCH" />
+                        <button type="submit" class="btn btn-nvo"
+                            onclick="return confirm('¿Estás seguro de que deseas dar de baja esta editorial?');">
+                            <i class="fas fa-feather-alt"></i> Dar de baja
+                        </button>
+                    </form>
+                    <form sec:authorize="hasRole('ADMIN')" th:action="@{/editorial/alta/__${editorial.id}__}"
+                        method="post" style="display:inline;">
+                        <input type="hidden" name="_method" value="PATCH" />
+                        <button type="submit" class="btn btn-nvo"
+                            onclick="return confirm('¿Estás seguro de que deseas dar de alta este editorial?');">
+                            <i class="fas fa-feather-alt"></i> Dar de alta
+                        </button>
+                    </form>
+                    <form sec:authorize="hasRole('ADMIN')" th:action="@{/editorial/eliminar/__${editorial.id}__}"
+                        method="post" style="display:inline;">
+                        <input type="hidden" name="_method" value="DELETE" />
+                        <button type="submit" class="btn btn-delete"
+                            onclick="return confirm('¿Estás seguro de que deseas eliminar esta editorial?');">
+                            <i class="fas fa-trash-alt"></i> Eliminar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"> </footer>
+
+</body>
+
+</html>
