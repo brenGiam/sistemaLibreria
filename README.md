@@ -36,12 +36,15 @@ Aplicación desarrollada con Java y Spring Boot que permite gestionar librerías
 ## 🧪 Pruebas
 Se realizaron pruebas con Postman para verificar el correcto funcionamiento de los endpoints. A continuación, se describen algunos de los endpoints principales de la API.
 
-📦 Endpoints principales
-Método	    Endpoint	            Descripción
-POST	    /registro	            Registrar un nuevo usuario
-GET	        /login	                Iniciar sesión
-POST	    /libro/crear	        Crear un nuevo libro
-GET	        /libro/listarTodos	    Listar todos los libros
-PUT	    /libro/modificar/{isbn}	    Actualizar libro existente
-DELETE	/libro/eliminar/{isbn}	    Eliminar un libro
+
+## 📦 Endpoints principales
+
+| Método | Endpoint                    | Descripción                          |
+|--------|-----------------------------|--------------------------------------|
+| POST   | /registro                   | Registrar un nuevo usuario           |
+| GET    | /login                       | Iniciar sesión del usuario          |
+| POST   | /libro/crear                | Crear un nuevo libro                 |
+| GET    | /libro/listarTodos           | Listar todos los libros              |
+| PUT    | /libro/modificar/{isbn}      | Actualizar un libro existente       |
+| DELETE | /libro/eliminar/{isbn}       | Eliminar un libro por ISBN          |
 
